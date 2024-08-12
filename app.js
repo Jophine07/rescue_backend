@@ -47,6 +47,20 @@ app.post("/adminSignin",(req,res)=>{
     ).catch()
 })
 
+app.post("/addPeople",(req,res)=>{
+    let input = req.body
+    let token = req.headers.token
+    jwt.verify(token,"rescue-app",(error,decoded)=>{
+        if(decoded && decoded.email){
+            let result = new peopleModel(input)
+            result.save()
+            res.json({"status":"success"})
+        }
+        else{
+            res.json({"status":"invalid authentication"})
+        }
+    })
+})
 
 app.listen(8080,()=>{
     console.log("server stated")
